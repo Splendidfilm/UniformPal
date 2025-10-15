@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Logo from "./Logo";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import AddUniformModal from "./AddUniformModal";
 import SearchModal from "./SearchModal";
@@ -21,7 +20,9 @@ function Nav() {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-4">
         {/* Logo */}
         <div className="flex items-center">
-          <Logo />
+    <div>
+        <h1 className='text-3xl font-bold text-center my-4 text-purple-500 w-1/3'>UniformPal</h1>
+    </div>
         </div>
 
         {/* Links + CTA (Desktop) */}
@@ -119,82 +120,3 @@ function Nav() {
 
 export default Nav;
 
-
-// import React from "react";
-// import Logo from "./Logo";
-// import { Search, Plus, Menu } from "lucide-react";
-
-// function Nav() {
-//   return (
-//     <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
-//       <div className="flex items-center justify-between px-6 md:px-12 py-4">
-//         {/* Logo */}
-//         <div className="flex items-center gap-2">
-//           <Logo />
-//         </div>
-
-//         {/* Middle Navigation (optional links) */}
-//         <div className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
-//           <a
-//             href="#home"
-//             className="hover:text-purple-600 transition-colors duration-200"
-//           >
-//             Home
-//           </a>
-//           <a
-//             href="#uniforms"
-//             className="hover:text-purple-600 transition-colors duration-200"
-//           >
-//             Uniforms
-//           </a>
-//           <a
-//             href="#contact"
-//             className="hover:text-purple-600 transition-colors duration-200"
-//           >
-//             Contact
-//           </a>
-//         </div>
-
-//         {/* Right Section */}
-//         <div className="flex items-center gap-4">
-//           <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-md">
-//             <Plus size={18} />
-//             <span>Add</span>
-//           </button>
-
-//           <button className="hidden sm:flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-100 active:scale-95 transition-all">
-//             <Search size={18} />
-//             <span>Search</span>
-//           </button>
-
-//           {/* Mobile menu icon */}
-//           <button className="sm:hidden p-2 rounded-md hover:bg-gray-100 transition">
-//             <Menu size={22} />
-//           </button>
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// }
-
-// export default Nav;
-
-// // import React from 'react'
-// // import Logo from './Logo'
-// // // import Search from './Search'
-
-// // function Nav() {
-// //   return (
-// //     <div className='flex flex-row flex-wrap w-full justify-around bg-gray-50 items-center shadow-md' >
-// //         <Logo/>
-// //         {/* <div className='flex ' >
-// //     <span className='flex items-center justify-center px-4 py-2  rounded-full bg-gray-300 cursor-pointer hover:opacity-50 transition-all m-4 active:scale-90'>
-// //     <h1 className='text-center flex font-bold text-2xl '>+</h1>
-// //     </span>
-// //         </div> */}
-// //         {/* <Search /> */}
-// //     </div>
-// //   )
-// // }
-
-// // export default Nav
