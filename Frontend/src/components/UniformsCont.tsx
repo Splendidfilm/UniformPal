@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Trash2, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import UniformDetailModal from "./UniformDetailModal";
+import { API_BASE_URL } from "../config";
 
 interface Uniform {
   id: string;
@@ -26,7 +27,7 @@ function UniformsCont() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:5000/uniforms")
+    fetch(`${API_BASE_URL}/add-uniform`,)
       .then((res) => res.json())
       .then((data) => setUniforms(data))
       .catch((err) => console.error("Error fetching uniforms:", err))
@@ -46,7 +47,7 @@ function UniformsCont() {
 
     setDeleting(id);
     try {
-      const response = await fetch(`http://localhost:5000/delete-uniform/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/add-uniform${id}`, {
         method: "DELETE",
       });
       if (response.ok) {

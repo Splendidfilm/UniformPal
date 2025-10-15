@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Trash2, Loader2 } from "lucide-react";
+import { API_BASE_URL } from "../config";
 
 interface Uniform {
   id: string;
@@ -33,8 +34,7 @@ const UniformDetailModal: React.FC<Props> = ({ uniform, onClose, onDelete }) => 
 
     setDeleting(true);
     try {
-      const res = await fetch(
-        `http://localhost:5000/delete-uniform/${encodeURIComponent(uniform.id)}`,
+      const res = await fetch(`${API_BASE_URL}/add-uniform${encodeURIComponent(uniform.id)}`,
         { method: "DELETE" }
       );
 
