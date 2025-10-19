@@ -25,15 +25,17 @@ function UniformsCont() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [selectedUniform, setSelectedUniform] = useState<Uniform | null>(null);
 
+  // ✅ Fetch uniforms on load
   useEffect(() => {
     setLoading(true);
-    fetch(`${API_BASE_URL}/add-uniform`,)
+    fetch(`${API_BASE_URL}/uniforms`)
       .then((res) => res.json())
       .then((data) => setUniforms(data))
-      .catch((err) => console.error("Error fetching uniforms:", err))
+      .catch((err) => console.error("❌ Error fetching uniforms:", err))
       .finally(() => setLoading(false));
   }, []);
 
+  // ✅ Filtering and sorting
   const filtered = uniforms
     .filter((u) => filterType === "all" || u.schoolType === filterType)
     .sort((a, b) =>
@@ -42,19 +44,24 @@ function UniformsCont() {
         : b.school.localeCompare(a.school)
     );
 
+  // ✅ Handle deletion
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this uniform?")) return;
 
     setDeleting(id);
     try {
-      const response = await fetch(`${API_BASE_URL}/delete-uniform${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/delete-uniform/${encodeURIComponent(id)}`,
+        { method: "DELETE" }
+      );
+
       if (response.ok) {
         setUniforms((prev) => prev.filter((u) => u.id !== id));
+      } else {
+        alert("❌ Failed to delete uniform.");
       }
     } catch (err) {
-      console.error("Error deleting:", err);
+      console.error("❌ Error deleting:", err);
       alert("Error deleting uniform.");
     } finally {
       setDeleting(null);
@@ -63,7 +70,7 @@ function UniformsCont() {
 
   return (
     <section className="w-full px-6 md:px-12 py-10 bg-gradient-to-b from-gray-50 to-white rounded-2xl shadow-sm">
-      {/* Filter + Sort Bar */}
+      {/* Filter + Sort Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 max-w-6xl mx-auto mb-8">
         <div className="flex gap-3 flex-wrap justify-center">
           {["all", "primary", "secondary"].map((type) => (
@@ -89,7 +96,7 @@ function UniformsCont() {
         </button>
       </div>
 
-      {/* Loading / Empty / Grid */}
+      {/* Loading / Empty / Data Grid */}
       {loading ? (
         <div className="flex justify-center items-center py-20">
           <Loader2 className="animate-spin text-purple-500" size={28} />
@@ -120,7 +127,7 @@ function UniformsCont() {
                 />
               </div>
 
-              {/* Text */}
+              {/* Info */}
               <div className="p-4 space-y-1">
                 <h3 className="font-semibold text-gray-800 text-lg truncate">
                   {u.school}
@@ -168,6 +175,3 @@ function UniformsCont() {
 }
 
 export default UniformsCont;
-
-
-
