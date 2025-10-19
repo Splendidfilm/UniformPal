@@ -1,3 +1,3 @@
 export const API_BASE_URL =
- "https://uniformpal-backend.onrender.com" || "http://localhost:5000";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 // Please work

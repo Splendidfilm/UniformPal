@@ -25,14 +25,24 @@ function UniformsCont() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [selectedUniform, setSelectedUniform] = useState<Uniform | null>(null);
 
+
+  const fetchUniforms = async () => {
+    setLoading(true)
+    try{
+      const res =await fetch (`${API_BASE_URL}/uniforms`)
+      const data = await res.json()
+      setUniforms(data)
+  } catch(err){
+    console.error("Error fetching uniforms:", err)
+  }finally{
+    setLoading(false)
+  }
+  }
+
   // ✅ Fetch uniforms on load
   useEffect(() => {
-    setLoading(true);
-    fetch(`${API_BASE_URL}/uniforms`)
-      .then((res) => res.json())
-      .then((data) => setUniforms(data))
-      .catch((err) => console.error("❌ Error fetching uniforms:", err))
-      .finally(() => setLoading(false));
+    fetchUniforms()
+    
   }, []);
 
   // ✅ Filtering and sorting
@@ -56,6 +66,7 @@ function UniformsCont() {
       );
 
       if (response.ok) {
+        await fetchUniforms()
         setUniforms((prev) => prev.filter((u) => u.id !== id));
       } else {
         alert("❌ Failed to delete uniform.");

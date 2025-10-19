@@ -2,7 +2,9 @@ import Header from "./components/Header";
 import Nav from "./components/Nav";
 import UniformsCont from "./components/UniformsCont";
 
+
 function App() {
+
   return (
     <div className="flex flex-col items-center justify-around min-h-screen bg-gray-50 text-gray-800">
       {/* Navigation Bar */}
@@ -20,7 +22,7 @@ function App() {
 
       {/* Main Content */}
       <section id="uniforms" className="w-full mt-6">
-        <UniformsCont />
+        <UniformsCont  />
       </section>
 
       {/* Footer (Optional) */}
