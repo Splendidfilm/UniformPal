@@ -1,19 +1,32 @@
 import Header from "./components/Header";
 import Nav from "./components/Nav";
 import UniformsCont from "./components/UniformsCont";
+
 function App() {
   return (
-    <div className="flex flex-col items-center justify-around ">
+    <div className="flex flex-col items-center justify-around min-h-screen bg-gray-50 text-gray-800">
+      {/* Navigation Bar */}
       <Nav />
-      <div id="home" className="w-full">
+
+      {/* Hero / Header Section */}
+      <section id="home" className="w-full">
         <Header />
-      </div>
+      </section>
 
-      <h1 className="text-xl mb-6 font-medium text-gray-800">Uniforms</h1>
+      {/* Section Title */}
+      <h1 className="text-2xl md:text-3xl font-semibold mt-8 mb-6 text-center text-purple-700">
+        Uniforms
+      </h1>
 
-      <div id="uniforms" className="w-full mt-10">
+      {/* Main Content */}
+      <section id="uniforms" className="w-full mt-6">
         <UniformsCont />
-      </div>
+      </section>
+
+      {/* Footer (Optional) */}
+      <footer className="mt-10 py-6 text-sm text-gray-500">
+        © {new Date().getFullYear()} UniformPal — All Rights Reserved
+      </footer>
     </div>
   );
 }

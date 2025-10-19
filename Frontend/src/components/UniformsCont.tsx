@@ -47,7 +47,7 @@ function UniformsCont() {
 
     setDeleting(id);
     try {
-      const response = await fetch(`${API_BASE_URL}/add-uniform${id}`, {
+      const response = await fetch(`${API_BASE_URL}/delete-uniform${id}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -114,7 +114,7 @@ function UniformsCont() {
               {/* Image */}
               <div className="relative w-full h-60 overflow-hidden">
                 <img
-                  src={`http://localhost:5000${u.uniformImage}`}
+                  src={`${API_BASE_URL}${u.uniformImage}`}
                   alt={u.school}
                   className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                 />

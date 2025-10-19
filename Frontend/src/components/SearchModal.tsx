@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Trash2, Search, Loader2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import UniformDetailModal from './UniformDetailModal'
+import UniformDetailModal from "./UniformDetailModal";
 import { API_BASE_URL } from "../config";
 
 interface Uniform {
@@ -29,12 +29,13 @@ function SearchModal({
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
-  const [selectedUniform, setSelectedUniform] = useState<Uniform | null>(null)
+  const [selectedUniform, setSelectedUniform] = useState<Uniform | null>(null);
 
+  // 🔹 Fetch all uniforms when modal opens
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
-      fetch(`${API_BASE_URL}/add-uniform`)
+      fetch(`${API_BASE_URL}/uniforms`)
         .then((res) => res.json())
         .then((data) => setUniforms(data))
         .catch((err) => console.error("Error fetching uniforms:", err))
@@ -42,14 +43,17 @@ function SearchModal({
     }
   }, [isOpen]);
 
+  // 🔹 Reset on close
   useEffect(() => {
     if (!isOpen) {
       setQuery("");
       setResults([]);
       setSearched(false);
+      setSelectedUniform(null);
     }
   }, [isOpen]);
 
+  // 🔹 Handle search
   const handleSearch = () => {
     setSearched(true);
     if (!query.trim()) {
@@ -63,18 +67,24 @@ function SearchModal({
     setResults(found);
   };
 
+ 
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this uniform?")) return;
 
     setDeleting(id);
     try {
-      const response = await fetch(`${API_BASE_URL}/add-uniform${encodeURIComponent(id)}`,
-        { method: "DELETE" }
+      const response = await fetch(
+        `${API_BASE_URL}/delete-uniform/${encodeURIComponent(id)}`,
+        {
+          method: "DELETE",
+        }
       );
 
       if (response.ok) {
         setUniforms((prev) => prev.filter((u) => u.id !== id));
         setResults((prev) => prev.filter((u) => u.id !== id));
+        if (selectedUniform?.id === id) setSelectedUniform(null);
+        alert("🗑️ Uniform deleted successfully!");
       } else {
         alert("Failed to delete uniform.");
       }
@@ -151,13 +161,13 @@ function SearchModal({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
                     transition={{ duration: 0.25 }}
-                    className="relative bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-3 flex flex-col group"
+                    className="relative bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-3 flex flex-col group cursor-pointer"
                     onClick={() => setSelectedUniform(r)}
                   >
                     {/* School Uniform */}
                     <div className="relative w-full h-44 overflow-hidden rounded-lg">
                       <img
-                        src={`http://localhost:5000${r.uniformImage}`}
+                        src={`${API_BASE_URL}${r.uniformImage}`}
                         alt={r.school}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -180,7 +190,7 @@ function SearchModal({
                       {r.compoundImage && (
                         <div className="flex flex-col items-center text-xs text-gray-600">
                           <img
-                            src={`http://localhost:5000${r.compoundImage}`}
+                            src={`${API_BASE_URL}${r.compoundImage}`}
                             alt={r.compoundWear}
                             className="w-full h-32 object-cover rounded-md"
                           />
@@ -190,7 +200,7 @@ function SearchModal({
                       {r.churchImage && (
                         <div className="flex flex-col items-center text-xs text-gray-600">
                           <img
-                            src={`http://localhost:5000${r.churchImage}`}
+                            src={`${API_BASE_URL}${r.churchImage}`}
                             alt={r.churchWear}
                             className="w-full h-32 object-cover rounded-md"
                           />
@@ -203,7 +213,10 @@ function SearchModal({
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
-                      onClick={() => handleDelete(r.id)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevent modal from opening
+                        handleDelete(r.id);
+                      }}
                       disabled={deleting === r.id}
                       className={`absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full ${
                         deleting === r.id
@@ -219,6 +232,8 @@ function SearchModal({
                     </motion.button>
                   </motion.div>
                 ))}
+
+                {/* Uniform Details Modal */}
                 <UniformDetailModal
                   uniform={selectedUniform}
                   onClose={() => setSelectedUniform(null)}
@@ -242,6 +257,3 @@ function SearchModal({
 }
 
 export default SearchModal;
-
-
-

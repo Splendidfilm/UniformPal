@@ -30,11 +30,11 @@ const UniformDetailModal: React.FC<Props> = ({ uniform, onClose, onDelete }) => 
 
   if (!uniform) return null;
 
-  const handleDelete = async () => { 
-
+  const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/add-uniform${encodeURIComponent(uniform.id)}`,
+      const res = await fetch(
+        `${API_BASE_URL}/delete-uniform/${encodeURIComponent(uniform.id)}`,
         { method: "DELETE" }
       );
 
@@ -42,6 +42,8 @@ const UniformDetailModal: React.FC<Props> = ({ uniform, onClose, onDelete }) => 
         alert("🗑️ Uniform deleted successfully!");
         onDelete(uniform.id);
         onClose();
+      } else {
+        alert("❌ Failed to delete uniform.");
       }
     } catch (err) {
       console.error("Delete error:", err);
@@ -98,7 +100,7 @@ const UniformDetailModal: React.FC<Props> = ({ uniform, onClose, onDelete }) => 
 
             {uniform.uniformImage && (
               <img
-                src={`http://localhost:5000${uniform.uniformImage}`}
+                src={`${API_BASE_URL}${uniform.uniformImage}`}
                 alt={uniform.school}
                 className="w-full h-64 object-cover rounded-xl mb-4"
               />
@@ -109,10 +111,12 @@ const UniformDetailModal: React.FC<Props> = ({ uniform, onClose, onDelete }) => 
                 {uniform.compoundWear && (
                   <div className="bg-gray-50 p-3 rounded-lg border">
                     <h4 className="font-semibold text-gray-700">Compound Wear</h4>
-                    <p className="text-sm text-gray-600 mb-2">{uniform.compoundWear}</p>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {uniform.compoundWear}
+                    </p>
                     {uniform.compoundImage && (
                       <img
-                        src={`http://localhost:5000${uniform.compoundImage}`}
+                        src={`${API_BASE_URL}${uniform.compoundImage}`}
                         alt="Compound Wear"
                         className="w-full h-40 object-cover rounded-md"
                       />
@@ -122,10 +126,12 @@ const UniformDetailModal: React.FC<Props> = ({ uniform, onClose, onDelete }) => 
                 {uniform.churchWear && (
                   <div className="bg-gray-50 p-3 rounded-lg border">
                     <h4 className="font-semibold text-gray-700">Church Wear</h4>
-                    <p className="text-sm text-gray-600 mb-2">{uniform.churchWear}</p>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {uniform.churchWear}
+                    </p>
                     {uniform.churchImage && (
                       <img
-                        src={`http://localhost:5000${uniform.churchImage}`}
+                        src={`${API_BASE_URL}${uniform.churchImage}`}
                         alt="Church Wear"
                         className="w-full h-40 object-cover rounded-md"
                       />

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, X } from "lucide-react";
-import { API_BASE_URL } from ".././config";
+import { API_BASE_URL } from "../config";
 
 function AddUniformModal({
   isOpen,
@@ -17,9 +17,9 @@ function AddUniformModal({
   const [churchWear, setChurchWear] = useState("");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [failedMessage, setFailedMessage] = useState<string | null>(null);
-  const [RequiredMessage, setRequiredMessage] = useState<string | null>(null);
+  const [requiredMessage, setRequiredMessage] = useState<string | null>(null);
 
-  // Image States
+  // Image states
   const [uniformImage, setUniformImage] = useState<File | null>(null);
   const [compoundImage, setCompoundImage] = useState<File | null>(null);
   const [churchImage, setChurchImage] = useState<File | null>(null);
@@ -43,9 +43,9 @@ function AddUniformModal({
     setUniformCombo("");
   };
 
-  const Required = (mess: string) => {
-    setRequiredMessage(mess);
-    setTimeout(() => setRequiredMessage(null), 2000);
+  const showRequired = (message: string) => {
+    setRequiredMessage(message);
+    setTimeout(() => setRequiredMessage(null), 2500);
   };
 
   const handleImageUpload = (
@@ -72,8 +72,8 @@ function AddUniformModal({
   };
 
   const handleSave = async () => {
-    if (!school || !uniformCombo) {
-      Required("Please fill in school name and uniform combination.");
+    if (!school.trim() || !uniformCombo.trim()) {
+      showRequired("Please fill in school name and uniform combination.");
       return;
     }
 
@@ -92,6 +92,7 @@ function AddUniformModal({
         method: "POST",
         body: formData,
       });
+
       const result = await response.json();
 
       if (response.ok) {
@@ -100,14 +101,15 @@ function AddUniformModal({
           reset();
           setSuccessMessage(null);
           onClose();
-        }, 1500);
+        }, 1800);
       } else {
         setFailedMessage(result.message || "❌ Failed to add uniform.");
-        setTimeout(() => setFailedMessage(null), 2000);
+        setTimeout(() => setFailedMessage(null), 2500);
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("Network error:", error);
       setFailedMessage("Network error. Could not add uniform.");
+      setTimeout(() => setFailedMessage(null), 2500);
     }
   };
 
@@ -119,7 +121,7 @@ function AddUniformModal({
         transition={{ type: "spring", duration: 0.4 }}
         className="bg-white w-11/12 md:w-3/4 lg:w-2/3 rounded-2xl shadow-xl border border-gray-100 overflow-y-auto max-h-[90vh] p-6 md:p-10 relative"
       >
-        {/* Close Button */}
+        {/* Close button */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-red-500 transition-all"
@@ -132,7 +134,7 @@ function AddUniformModal({
           Add New <span className="text-purple-600">Uniform</span>
         </h2>
 
-        {/* School Type Toggle */}
+        {/* School type toggle */}
         <div className="relative bg-gray-100 rounded-full w-72 h-12 flex items-center justify-between px-2 mx-auto mb-6">
           <motion.div
             layout
@@ -146,7 +148,7 @@ function AddUniformModal({
                   : 4,
               width: schoolType ? "48%" : "0%",
             }}
-          ></motion.div>
+          />
           <button
             onClick={() => setSchoolType("primary")}
             className={`z-10 w-1/2 py-2 text-center font-medium transition-all ${
@@ -165,13 +167,13 @@ function AddUniformModal({
           </button>
         </div>
 
+        {/* Main form */}
         {schoolType && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex flex-col items-center gap-5"
           >
-            {/* School Info Inputs */}
             <input
               type="text"
               placeholder="School Name"
@@ -188,7 +190,7 @@ function AddUniformModal({
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-400 outline-none"
             />
 
-            {/* Uniform Upload */}
+            {/* Uniform Image */}
             <label className="relative flex flex-col items-center justify-center w-full border-2 border-dashed rounded-xl cursor-pointer hover:border-purple-400 transition-all p-4">
               {uniformPreview ? (
                 <img
@@ -210,7 +212,7 @@ function AddUniformModal({
               />
             </label>
 
-            {/* Secondary School Extras */}
+            {/* Secondary school fields */}
             {schoolType === "secondary" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                 {[
@@ -268,7 +270,7 @@ function AddUniformModal({
           </motion.div>
         )}
 
-        {/* Save Button */}
+        {/* Save button */}
         <div className="w-full flex justify-center mt-6">
           <button
             onClick={handleSave}
@@ -290,7 +292,6 @@ function AddUniformModal({
               {successMessage}
             </motion.div>
           )}
-
           {failedMessage && (
             <motion.div
               initial={{ y: -20, opacity: 0 }}
@@ -301,15 +302,14 @@ function AddUniformModal({
               {failedMessage}
             </motion.div>
           )}
-
-          {RequiredMessage && (
+          {requiredMessage && (
             <motion.div
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed top-20 bg-orange-500 text-white px-6 py-3 rounded-full shadow-md font-medium"
             >
-              {RequiredMessage}
+              {requiredMessage}
             </motion.div>
           )}
         </AnimatePresence>
@@ -319,7 +319,3 @@ function AddUniformModal({
 }
 
 export default AddUniformModal;
-
-
-
-
