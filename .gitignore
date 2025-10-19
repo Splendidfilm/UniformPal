@@ -1,9 +1,0 @@
-# Node
-node_modules
-.env
-
-# Vite build
-dist
-
-# Logs
-*.log
